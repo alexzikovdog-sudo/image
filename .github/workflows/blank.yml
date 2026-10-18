@@ -22,7 +22,6 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    # ЭТОТ ШАГ АВТОМАТИЧЕСКИ ПРИМЕТ ЛИЦЕНЗИИ
     - name: Accept Android SDK Licenses
       run: yes | sdkmanager --licenses
 
