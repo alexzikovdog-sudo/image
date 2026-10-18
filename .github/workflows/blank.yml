@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Позволяет запускать сборку вручную
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,19 +19,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    # Обновлено до v4 и явно указан пакет platform-tools
     - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+      uses: android-actions/setup-android@v4
       with:
-        accept-android-sdk-licenses: true
+        packages: 'platform-tools'
 
-    # Принудительное принятие всех лицензий (решает проблему с MIPS)
-    - name: Accept Additional SDK Licenses
-      run: |
-        echo y | sdkmanager --licenses
-        echo y | sdkmanager --sdk_root=$ANDROID_HOME --licenses
-
-    # ВАЖНО: Судя по вашим скриншотам, файлы проекта лежат в папке ImageGen.
-    # Поэтому мы указываем working-directory: ./ImageGen
     - name: Grant execute permission for gradlew
       working-directory: ./ImageGen
       run: chmod +x gradlew
@@ -44,5 +37,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        # Путь к готовому APK файлу внутри папки ImageGen
         path: ImageGen/app/build/outputs/apk/debug/app-debug.apk
